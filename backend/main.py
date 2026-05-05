@@ -79,6 +79,18 @@ async def chat(request: ChatRequest):
     return StreamingResponse(generate(), media_type="text/event-stream")
 
 
+@app.post("/test-connection")
+async def test_connection(api_key: str = None):
+    if not api_key:
+        raise HTTPException(status_code=400, detail="API key is required")
+    try:
+        from groq import Groq
+        client = Groq(api_key=api_key)
+        client.models.list()
+        return {"status": "connected"}
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
 @app.get('/health')
 async def health_check():
     return {'status': 'healthy'}

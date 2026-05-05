@@ -1,16 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background-color: #0f0f0f;
-  color: #ffffff;
-  height: 100vh;
+    font-family: 'Space Mono', monospace;
+    background-color: #ffffff;
+    color: #000000;
+    height: 100vh;
 }
 
 #root {
-  height: 100vh;
+    height: 100vh;
 }
