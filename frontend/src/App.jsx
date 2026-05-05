@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react"
 import axios from "axios"
 import "./App.css"
+import SystemDesignModal from "./SystemDesignModal"
+import DeveloperInfoModal from "./DeveloperInfoModal"
 
 const API_URL = 'http://localhost:8000'
 
@@ -14,6 +16,8 @@ export default function App() {
     const [docsReady, setDocsReady] = useState(false)
     const [chunks, setChunks] = useState(0)
     const [connStatus, setConnStatus] = useState(null) // null | 'testing' | 'connected' | 'failed'
+    const [showSystemDesign, setShowSystemDesign] = useState(false)
+    const [showDevInfo, setShowDevInfo] = useState(false)
     const messagesEndRef = useRef(null)
 
     useEffect(() => {
@@ -195,11 +199,11 @@ export default function App() {
                     )}
                 </div>
 
-                <div className="system-design-card">
+                <div className="system-design-card" onClick={() => setShowSystemDesign(true)}>
                     <p>View System Design.</p>
                 </div>
 
-                <div className="sidebar-footer">
+                <div className="sidebar-footer" onClick={() => setShowDevInfo(true)} style={{ cursor: "pointer" }}>
                     <p className="developer-info">Developer Info.</p>
                 </div>
             </div>
@@ -252,6 +256,13 @@ export default function App() {
                     </button>
                 </div>
             </div>
+
+            {showSystemDesign && (
+                <SystemDesignModal onClose={() => setShowSystemDesign(false)} />
+            )}
+            {showDevInfo && (
+                <DeveloperInfoModal onClose={() => setShowDevInfo(false)} />
+            )}
         </div>
     )
 }
