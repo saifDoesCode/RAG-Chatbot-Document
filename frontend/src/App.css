@@ -169,18 +169,6 @@
     color: #000000;
 }
 
-/* Sidebar footer */
-.sidebar-footer {
-    margin-top: auto;
-    padding-top: 16px;
-    border-top: 2px solid #000000;
-}
-
-.developer-info {
-    font-size: 14px;
-    font-weight: 700;
-    color: #000000;
-}
 
 /* ── Chat area ── */
 .chat {

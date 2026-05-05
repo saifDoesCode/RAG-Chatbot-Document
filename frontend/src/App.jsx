@@ -3,6 +3,7 @@ import axios from "axios"
 import "./App.css"
 import SystemDesignModal from "./SystemDesignModal"
 import DeveloperInfoModal from "./DeveloperInfoModal"
+import ParticleConeCard from "./ParticleConeCard"
 
 const API_URL = 'http://localhost:8000'
 
@@ -203,9 +204,7 @@ export default function App() {
                     <p>View System Design.</p>
                 </div>
 
-                <div className="sidebar-footer" onClick={() => setShowDevInfo(true)} style={{ cursor: "pointer" }}>
-                    <p className="developer-info">Developer Info.</p>
-                </div>
+                <ParticleConeCard onInfoClick={() => setShowDevInfo(true)} />
             </div>
 
             <div className="chat">
