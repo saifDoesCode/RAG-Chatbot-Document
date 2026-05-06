@@ -3,7 +3,6 @@ import tempfile
 from typing import Optional
 from dotenv import load_dotenv
 from langchain_community.document_loaders import (
-    PyMuPDFLoader,
     TextLoader,
     PyPDFLoader,
     Docx2txtLoader
@@ -27,14 +26,17 @@ Rules:
 - Be concise and accurate
 - Reference the source document when relevant"""
 
+# Load once at startup — not per request
+EMBEDDINGS = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/paraphrase-MiniLM-L3-v2",
+    model_kwargs={"device": "cpu"},
+    encode_kwargs={"normalize_embeddings": True},
+)
+
 class RAGEngine:
     def __init__(self, api_key: str):
         self.vectorstore = None
-        self.embeddings = HuggingFaceEmbeddings(
-            model_name = "sentence-transformers/all-MiniLM-L6-v2",
-            model_kwargs = {"device": "cpu"},
-            encode_kwargs = {"normalize_embeddings": True},
-        )
+        self.embeddings = EMBEDDINGS  # reference the global
         self.llm = ChatGroq(
             groq_api_key = api_key,
             model_name = "llama-3.3-70b-versatile",
