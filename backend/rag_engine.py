@@ -8,10 +8,11 @@ from langchain_community.document_loaders import (
     Docx2txtLoader
 )
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_cohere import CohereEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+
 
 load_dotenv()
 
@@ -27,12 +28,10 @@ Rules:
 - Reference the source document when relevant"""
 
 # Load once at startup — not per request
-EMBEDDINGS = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/paraphrase-MiniLM-L3-v2",
-    model_kwargs={"device": "cpu"},
-    encode_kwargs={"normalize_embeddings": True},
+EMBEDDINGS = CohereEmbeddings(
+    model="embed-english-light-v3.0",
+    cohere_api_key=os.getenv("COHERE_API_KEY")
 )
-
 class RAGEngine:
     def __init__(self, api_key: str):
         self.vectorstore = None
