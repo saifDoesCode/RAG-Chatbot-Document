@@ -86,11 +86,14 @@ async def test_connection(api_key: str = None):
         raise HTTPException(status_code=400, detail="API key is required")
     try:
         from groq import Groq
+        from groq import AuthenticationError
         client = Groq(api_key=api_key)
         client.models.list()
         return {"status": "connected"}
-    except Exception:
+    except AuthenticationError:
         raise HTTPException(status_code=401, detail="Invalid API key")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Connection error: {str(e)}")
 
 @app.get('/health')
 async def health_check():
