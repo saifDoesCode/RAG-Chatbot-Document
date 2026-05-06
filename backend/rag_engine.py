@@ -8,13 +8,29 @@ from langchain_community.document_loaders import (
     Docx2txtLoader
 )
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_cohere import CohereEmbeddings
+import cohere as cohere_sdk
+from langchain_core.embeddings import Embeddings
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 
 load_dotenv()
+
+
+class CohereEmbeddings(Embeddings):
+    def __init__(self, model: str, cohere_api_key: str):
+        self.model = model
+        self._client = cohere_sdk.Client(api_key=cohere_api_key)
+
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        response = self._client.embed(texts=texts, model=self.model, input_type="search_document")
+        return response.embeddings
+
+    def embed_query(self, text: str) -> list[float]:
+        response = self._client.embed(texts=[text], model=self.model, input_type="search_query")
+        return response.embeddings[0]
+
 
 SYSTEM_PROMPT = """You are a helpful AI assistant. Answer the user's questions based strictly on the document context provided below.
 
