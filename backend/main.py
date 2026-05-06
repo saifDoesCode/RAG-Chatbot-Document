@@ -86,13 +86,17 @@ async def test_connection(api_key: str = None):
         raise HTTPException(status_code=400, detail="API key is required")
     try:
         from groq import Groq
-        from groq import AuthenticationError
         client = Groq(api_key=api_key)
-        client.models.list()
+        client.chat.completions.create(
+            messages=[{"role": "user", "content": "hi"}],
+            model="llama-3.3-70b-versatile",
+            max_tokens=1
+        )
         return {"status": "connected"}
-    except AuthenticationError:
-        raise HTTPException(status_code=401, detail="Invalid API key")
     except Exception as e:
+        err = str(e).lower()
+        if "401" in err or "auth" in err or "invalid" in err or "unauthorized" in err:
+            raise HTTPException(status_code=401, detail="Invalid API key")
         raise HTTPException(status_code=500, detail=f"Connection error: {str(e)}")
 
 @app.get('/health')
