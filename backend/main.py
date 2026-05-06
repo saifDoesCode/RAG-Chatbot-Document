@@ -12,7 +12,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
     "http://localhost:5173",
-    "https://ragnify-chatbot-document.vercel.app",  # actual Vercel URL
+    "https://rag-chatbot-document-anzt.vercel.app",  # actual Vercel URL
     "https://*.vercel.app",  # covers all Vercel preview URLs
     ],
     allow_credentials=True,
