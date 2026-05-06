@@ -5,7 +5,7 @@ import SystemDesignModal from "./SystemDesignModal"
 import DeveloperInfoModal from "./DeveloperInfoModal"
 import ParticleConeCard from "./ParticleConeCard"
 
-const API_URL = 'https://ragnify-backend.onrender.com/health'
+const API_URL = 'https://ragnify-backend.onrender.com'
 
 export default function App() {
     const [apiKey, setApiKey] = useState("")
