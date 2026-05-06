@@ -43,15 +43,13 @@ Rules:
 - Be concise and accurate
 - Reference the source document when relevant"""
 
-# Load once at startup — not per request
-EMBEDDINGS = CohereEmbeddings(
-    model="embed-english-light-v3.0",
-    cohere_api_key=os.getenv("COHERE_API_KEY")
-)
 class RAGEngine:
     def __init__(self, api_key: str):
         self.vectorstore = None
-        self.embeddings = EMBEDDINGS  # reference the global
+        self.embeddings = CohereEmbeddings(
+            model="embed-english-light-v3.0",
+            cohere_api_key=os.getenv("COHERE_API_KEY")
+        )
         self.llm = ChatGroq(
             groq_api_key = api_key,
             model_name = "llama-3.3-70b-versatile",
