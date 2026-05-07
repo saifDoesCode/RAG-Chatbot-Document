@@ -20,7 +20,9 @@ A full-stack Retrieval-Augmented Generation (RAG) application that lets users up
 
 > Upload a PDF → Ask a question → Get a grounded, sourced answer in real time
 
-*(Add a screenshot or GIF here)*
+<img width="651" height="883" alt="Screenshot 2026-05-07 at 12 13 29 PM" src="https://github.com/user-attachments/assets/7610be76-214c-47fd-8052-e8a840113cec" />
+<img width="652" height="897" alt="Screenshot 2026-05-07 at 12 14 36 PM" src="https://github.com/user-attachments/assets/0dd76223-c13a-4410-bb15-48663d248551" />
+
 
 ---
 
