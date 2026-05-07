@@ -20,7 +20,23 @@ export default function App() {
     const [showSystemDesign, setShowSystemDesign] = useState(false)
     const [showDevInfo, setShowDevInfo] = useState(false)
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const [slowWarning, setSlowWarning] = useState("")
     const messagesEndRef = useRef(null)
+    const slowTimerRef = useRef(null)
+
+    const startSlowTimer = () => {
+        clearTimeout(slowTimerRef.current)
+        slowTimerRef.current = setTimeout(() => {
+            setSlowWarning(
+                "The server is warming up after a period of inactivity — this first request may take up to 60 seconds. Thank you for your patience."
+            )
+        }, 6000)
+    }
+
+    const clearSlowTimer = () => {
+        clearTimeout(slowTimerRef.current)
+        setSlowWarning("")
+    }
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -29,17 +45,21 @@ export default function App() {
     const handleTestConnection = async () => {
         if (!apiKey) return
         setConnStatus('testing')
+        startSlowTimer()
         try {
             await axios.post(`${API_URL}/test-connection?api_key=${apiKey}`)
             setConnStatus('connected')
         } catch {
             setConnStatus('failed')
+        } finally {
+            clearSlowTimer()
         }
     }
 
     const handleUpload = async () => {
         if (!apiKey || files.length === 0) return
         setIsUploading(true)
+        startSlowTimer()
 
         const formData = new FormData()
         files.forEach(file => formData.append("files", file))
@@ -55,6 +75,7 @@ export default function App() {
             alert(err.response?.data?.detail || "Upload Failed")
         } finally {
             setIsUploading(false)
+            clearSlowTimer()
         }
     }
 
@@ -67,6 +88,7 @@ export default function App() {
         setQuestion("")
         setIsThinking(true)
         setMessages(prev => [...prev, { role: "assistant", content: "" }])
+        startSlowTimer()
 
         try {
             const response = await fetch(`${API_URL}/chat`, {
@@ -95,6 +117,7 @@ export default function App() {
                     try {
                         const data = JSON.parse(line)
                         if (data.type === "token") {
+                            clearSlowTimer()
                             setMessages(prev => {
                                 const updated = [...prev]
                                 const last = updated[updated.length - 1]
@@ -120,6 +143,7 @@ export default function App() {
             alert("Something went wrong")
         } finally {
             setIsThinking(false)
+            clearSlowTimer()
         }
     }
 
@@ -220,6 +244,13 @@ export default function App() {
                     )}
                 </div>
 
+                {slowWarning && !isThinking && (
+                    <div className="slow-warning">
+                        <span className="slow-warning-icon">⏳</span>
+                        {slowWarning}
+                    </div>
+                )}
+
                 <div className="system-design-card" onClick={() => setShowSystemDesign(true)}>
                     <p>View System Design.</p>
                 </div>
@@ -253,6 +284,12 @@ export default function App() {
                             )}
                         </div>
                     ))}
+                    {isThinking && slowWarning && (
+                        <div className="slow-warning-chat">
+                            <span className="slow-warning-icon">⏳</span>
+                            {slowWarning}
+                        </div>
+                    )}
                     {isThinking && (
                         <div className="message assistant">
                             <div className="bubble thinking">Thinking...</div>
