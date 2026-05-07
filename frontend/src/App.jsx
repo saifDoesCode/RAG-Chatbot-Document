@@ -19,6 +19,7 @@ export default function App() {
     const [connStatus, setConnStatus] = useState(null) // null | 'testing' | 'connected' | 'failed'
     const [showSystemDesign, setShowSystemDesign] = useState(false)
     const [showDevInfo, setShowDevInfo] = useState(false)
+    const [sidebarOpen, setSidebarOpen] = useState(false)
     const messagesEndRef = useRef(null)
 
     useEffect(() => {
@@ -135,10 +136,29 @@ export default function App() {
 
     return (
         <div className="app">
-            <div className="sidebar">
-                <div className="sidebar-header">
+            {/* Mobile header – hidden on desktop */}
+            <div className="mobile-header">
+                <button className="hamburger-btn" onClick={() => setSidebarOpen(true)} aria-label="Open menu">
+                    <span /><span /><span />
+                </button>
+                <div className="mobile-logo">
                     <h1 className="logo">Ragnify.</h1>
                     <p className="byline">Developed by <span className="accent">Saif Ahmed.</span></p>
+                </div>
+            </div>
+
+            {/* Backdrop – closes drawer on mobile */}
+            {sidebarOpen && (
+                <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
+            )}
+
+            <div className={`sidebar${sidebarOpen ? ' sidebar-open' : ''}`}>
+                <div className="sidebar-top-row">
+                    <div className="sidebar-header">
+                        <h1 className="logo">Ragnify.</h1>
+                        <p className="byline">Developed by <span className="accent">Saif Ahmed.</span></p>
+                    </div>
+                    <button className="sidebar-close-btn" onClick={() => setSidebarOpen(false)} aria-label="Close menu">✕</button>
                 </div>
 
                 <div className="config-card">
@@ -211,7 +231,10 @@ export default function App() {
                 <div className="messages">
                     {messages.length === 0 && (
                         <div className="empty">
-                            Upload documents and start asking questions
+                            {!docsReady && (
+                                <p className="mobile-configure-hint">Please Configure First.</p>
+                            )}
+                            <p>Upload documents and start asking questions</p>
                         </div>
                     )}
                     {messages.map((msg, i) => (
